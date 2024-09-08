@@ -1,24 +1,33 @@
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
-import { NextApiRequest, NextApiResponse } from "next";
-import { z } from 'zod';
-// generate a nextjs 14 route
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { body } = req;
-    const { name } = body;
-    if (!name) {
-        return res.status(400).json({ error: "Name is required" });
-    }
-    const { object } = await generateObject({
-        model: openai("gpt-4-turbo"),
-        schema: z.object({
-          project: z.object({
-            name: z.string(),
-            tasks: z.array(z.string()),
-          }),
-        }),
-        prompt: name,
-      });
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-    return res.status(200).json({ message: `Hello ${name}`, object });
+export async function POST(req: Request) {
+  const { name } = await req.json();
+  if (!name) {
+    return NextResponse.json(
+      { message: "Name is required" },
+      {
+        status: 400,
+      }
+    );
+  }
+  const { object } = await generateObject({
+    model: google("gemini-1.5-pro-latest"),
+    schema: z.object({
+      project: z.object({
+        name: z.string(),
+        tasks: z.array(z.string()),
+      }),
+    }),
+    prompt: name,
+  });
+
+  return NextResponse.json(
+    { message: `Hello ${name}`, object },
+    {
+      status: 201,
     }
+  );
+}
