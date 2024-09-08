@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json(
-    { message: `Hello ${name}`, object },
+    { message: "Content generated!", object },
     {
       status: 201,
     }
