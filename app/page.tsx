@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log("submit");
     e.preventDefault();
@@ -13,6 +17,11 @@ export default function Home() {
       },
     });
     const data = await response.json();
+
+    router.push(
+      `/project?project=${encodeURIComponent(JSON.stringify(data.object))}`
+    );
+
     console.log({ data });
   };
   return (
@@ -23,8 +32,8 @@ export default function Home() {
             AI Kanban Generator
           </h1>
           <p className="text-xl mb-8 text-center">
-            Enter your project idea, and we'll create a Notion Kanban board for
-            you!
+            Enter your project idea, and we&apos;ll create a Notion Kanban board
+            for you!
           </p>
           <form onSubmit={onSubmit} className="space-y-4">
             <input
