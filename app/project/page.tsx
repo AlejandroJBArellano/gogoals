@@ -62,7 +62,7 @@ export default async function page({
       </div>
       <section>
         <article className="flex justify-end">
-          <ExportToCSV project={projectParsed} />
+          <ExportToCSV project={projectParsed.project} />
         </article>
       </section>
     </main>
