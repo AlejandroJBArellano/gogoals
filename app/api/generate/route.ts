@@ -18,11 +18,21 @@ export async function POST(req: Request) {
     schema: z.object({
       project: z.object({
         name: z.string(),
-        tasks: z.array(z.string()),
+        tasks: z.array(
+          z.object({
+            name: z.string(),
+            description: z.string(),
+            startDate: z.string(),
+            endDate: z.string(),
+            priority: z.string(),
+          })
+        ),
       }),
     }),
     prompt: name,
   });
+
+  console.log({ object });
 
   return NextResponse.json(
     { message: "Content generated!", object },

@@ -13,7 +13,13 @@ export default async function page({
 
   const projectParsed = await JSON.parse(project);
 
-  const tasks: string[] = projectParsed.project.tasks;
+  const tasks: {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    priority: "low" | "medium" | "high";
+  }[] = projectParsed.project.tasks;
 
   return (
     <div className="flex flex-nowrap overflow-x-auto gap-8 pb-4">
@@ -24,13 +30,14 @@ export default async function page({
         >
           <h2 className="text-2xl font-bold mb-4">{column.title}</h2>
           <div className="space-y-4">
-            {tasks.map((task) => (
-              <div
-                key={task}
-                className="bg-blue-200 border-2 border-black p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
-              >
-                <p className="text-lg font-semibold mb-2">{task}</p>
-                {/* <div className="flex justify-between">
+            {columnIndex === 0 &&
+              tasks.map((task) => (
+                <div
+                  key={task.name}
+                  className="bg-blue-200 border-2 border-black p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+                >
+                  <p className="text-lg font-semibold mb-2">{task.name}</p>
+                  {/* <div className="flex justify-between">
                     <button
                       disabled={columnIndex === 0}
                       className="bg-orange-400 hover:bg-orange-500 text-black font-bold py-2 px-4 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:opacity-50"
@@ -44,8 +51,8 @@ export default async function page({
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div> */}
-              </div>
-            ))}
+                </div>
+              ))}
           </div>
         </div>
       ))}
