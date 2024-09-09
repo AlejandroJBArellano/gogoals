@@ -4,7 +4,15 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function POST(req: Request) {
-  const { name } = await req.json();
+  const {
+    name,
+    assignees = [
+      {
+        email: "alejandro@weareproficient.com",
+        name: "Alejandro",
+      },
+    ],
+  } = await req.json();
   if (!name) {
     return NextResponse.json(
       { message: "Name is required" },
@@ -25,11 +33,15 @@ export async function POST(req: Request) {
             startDate: z.string(),
             endDate: z.string(),
             priority: z.string(),
+            assignees: z.array(z.string()),
           })
         ),
       }),
     }),
-    prompt: name,
+    prompt: `Create tasks for a project described: "${name}".
+    And with the following assignees: ${assignees
+      .map((assignee: { email: string; name: string }) => assignee.name)
+      .join(", ")}`,
   });
 
   console.log({ object });
