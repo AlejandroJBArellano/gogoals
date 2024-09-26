@@ -1,26 +1,41 @@
+import generateSchema from "@/app/schemas/generate";
+import { prisma } from "@/prisma";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function POST(req: Request) {
-  const {
-    name,
-    assignees = [
-      {
-        email: "alejandro@weareproficient.com",
-        name: "Alejandro",
-      },
-    ],
-  } = await req.json();
-  if (!name) {
-    return NextResponse.json(
-      { message: "Name is required" },
-      {
-        status: 400,
-      }
-    );
+  const body = await req.json();
+  const result = generateSchema.safeParse(body);
+
+  if (!result.success) {
+    return NextResponse.json(result.error);
   }
+
+  const data = result.data!;
+
+  const { name, startDate, dueDate } = data;
+
+  const assignees = await prisma.collaborator.findMany({
+    where: {
+      id: { in: data.assignees },
+    },
+    include: { user: true },
+  });
+
+  let prompt = `Create tasks for a project described: "${name}".`;
+
+  if (assignees.length > 0) {
+    prompt += ` The project has the following assignees: ${assignees
+      .map((assignee) => `${assignee.user.name} - ${assignee.role}`)
+      .join(", ")}.`;
+  }
+
+  prompt += ` The project starts on ${startDate} and is due on ${dueDate}.`;
+
+  prompt += ` Please create a detailed task breakdown for this project, considering the timeframe and available assignees.`;
+
   const { object } = await generateObject({
     model: google("gemini-1.5-pro-latest"),
     schema: z.object({
@@ -38,10 +53,7 @@ export async function POST(req: Request) {
         ),
       }),
     }),
-    prompt: `Create tasks for a project described: "${name}".
-    And with the following assignees: ${assignees
-      .map((assignee: { email: string; name: string }) => assignee.name)
-      .join(", ")}`,
+    prompt,
   });
 
   console.log({ object });

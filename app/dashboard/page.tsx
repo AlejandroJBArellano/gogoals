@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { NewProject } from "../components/newProject";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -59,6 +60,9 @@ export default async function DashboardPage() {
               </Link>
             </div>
           ))}
+        </div>
+        <div className="mt-8">
+          <NewProject />
         </div>
       </section>
     </main>
