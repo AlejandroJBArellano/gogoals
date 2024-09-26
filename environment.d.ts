@@ -4,5 +4,6 @@ namespace NodeJS {
     GOOGLE_CLIENT_SECRET: string;
     DATABASE_URL: string;
     LOOPS_API_KEY: string;
+    STRIPE_SECRET_KEY: string;
   }
 }
