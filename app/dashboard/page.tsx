@@ -18,30 +18,33 @@ export default async function DashboardPage() {
   });
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <main className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md">
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Mis proyectos</h2>
-          <nav>
-            <ul>
-              {projects.map((project) => (
-                <li key={project.id} className="mb-2">
-                  <Link
-                    href={`/dashboard/project/${project.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {project.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
+        <nav className="p-4">
+          <ul>
+            {[
+              { path: "/dashboard/team", name: "My team" },
+              { path: "/dashboard/projects", name: "My projects" },
+              { path: "/dashboard/configuration", name: "Configuration" },
+              { path: "/dashboard/account", name: "Account" },
+              { path: "/dashboard/billing", name: "Billing" },
+            ].map((item) => (
+              <li key={item.path} className="mb-2">
+                <Link
+                  href={item.path}
+                  className="text-blue-600 hover:underline"
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-8">
+      <section className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-6">Mis proyectos</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
@@ -57,7 +60,7 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
