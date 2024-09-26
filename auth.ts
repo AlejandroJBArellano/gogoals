@@ -4,6 +4,7 @@ import NextAuth from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import loops from "./loops";
+import stripe from "./stripe";
 
 export const {
   handlers: { GET, POST },
@@ -21,15 +22,16 @@ export const {
       if (!resp.success) {
         console.log("LOOPS_ERROR_SIGN_IN_CREATE_CONTACT", resp.message);
       }
-      // const customer = await stripe.customers.create({
-      //   email: profile?.email,
-      //   name: profile?.name,
-      // });
+      await stripe.customers.create({
+        email: profile?.email,
+        name: profile?.name,
+      });
       return true;
     },
     async jwt({ token }) {
       const user = await prisma.user.findUnique({
         where: { email: token.email! },
+        select: { id: true },
       });
 
       token.user = user;
