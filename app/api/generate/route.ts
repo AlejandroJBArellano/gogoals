@@ -17,16 +17,15 @@ export async function POST(req: Request) {
 
   const { name, startDate, dueDate } = data;
 
-  const assignees = await prisma.collaborator.findMany({
-    where: {
-      id: { in: data.assignees },
-    },
-    include: { user: true },
-  });
-
   let prompt = `Create tasks for a project described: "${name}".`;
 
-  if (assignees.length > 0) {
+  if (data.assignees.length > 0) {
+    const assignees = await prisma.collaborator.findMany({
+      where: {
+        id: { in: data.assignees },
+      },
+      include: { user: true },
+    });
     prompt += ` The project has the following assignees: ${assignees
       .map((assignee) => `${assignee.user.name} - ${assignee.role}`)
       .join(", ")}.`;

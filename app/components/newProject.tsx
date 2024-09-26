@@ -21,7 +21,12 @@ export const NewProject = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: projectName }),
+        body: JSON.stringify({
+          name: projectName,
+          startDate: new Date(),
+          dueDate: new Date(new Date().setDate(new Date().getDate() + 30)), // Set default due date to 30 days from now
+          assignees: [],
+        }),
       });
       if (response.ok) {
         close();
