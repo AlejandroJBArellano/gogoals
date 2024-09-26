@@ -15,6 +15,7 @@
     "@prisma/client": "^5.20.0",
     "@types/react-csv": "^1.1.10",
     "ai": "^3.3.28",
+    "loops": "^3.3.0",
     "next": "^14.2.13",
     "next-auth": "^5.0.0-beta.21",
     "react": "^18",
