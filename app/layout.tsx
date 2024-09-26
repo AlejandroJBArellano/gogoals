@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,17 +25,28 @@ export default async function RootLayout({
           <h1 className="text-5xl font-bold text-white">GoGoals</h1>
           <div className="flex items-center">
             {session?.user ? (
-              <Image
-                src={session.user.image || "/default-avatar.png"}
-                alt="User profile"
-                width={40}
-                height={40}
-                className="w-10 h-10 rounded-full border-2 border-white"
-              />
+              <>
+                <Image
+                  src={session.user.image || "/default-avatar.png"}
+                  alt="User profile"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-full border-2 border-white mr-4"
+                />
+                <Link
+                  href="api/auth/signout"
+                  className="bg-white text-blue-500 px-4 py-2 rounded-full font-semibold"
+                >
+                  Sign Out
+                </Link>
+              </>
             ) : (
-              <button className="bg-white text-blue-500 px-4 py-2 rounded-full font-semibold">
+              <Link
+                href="api/auth/signin"
+                className="bg-white text-blue-500 px-4 py-2 rounded-full font-semibold"
+              >
                 Sign In
-              </button>
+              </Link>
             )}
           </div>
         </header>
