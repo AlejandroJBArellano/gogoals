@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
+import { Toaster } from "react-hot-toast";
 
 export default async function DashboardLayout({
   children,
@@ -68,6 +69,7 @@ export default async function DashboardLayout({
         </nav>
       </aside>
       {children}
+      <Toaster />
     </main>
   );
 }

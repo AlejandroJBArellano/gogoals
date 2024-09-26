@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { InviteUser } from "@/components/invite-user";
 import { prisma } from "@/prisma";
 
 export default async function TeamFromUser() {
@@ -11,21 +12,7 @@ export default async function TeamFromUser() {
       <h1 className="text-2xl font-bold mb-6">My Team</h1>
 
       {/* Add User Form */}
-      <form className="mb-8">
-        <div className="flex items-center">
-          <input
-            type="email"
-            placeholder="Enter user email"
-            className="flex-grow mr-2 p-2 border rounded"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Add User
-          </button>
-        </div>
-      </form>
+      <InviteUser />
 
       {/* User List */}
       <div>
