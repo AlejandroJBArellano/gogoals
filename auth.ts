@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
+import loops from "./loops";
 
 export const {
   handlers: { GET, POST },
@@ -14,11 +15,12 @@ export const {
   providers: [Google],
   session: { strategy: "jwt" },
   callbacks: {
-    async signIn() {
-      // const resp = await loops.createContact(profile?.email!);
-      // if (!resp.success) {
-      //   console.log("LOOPS_ERROR_SIGN_IN_CREATE_CONTACT", resp.message);
-      // }
+    async signIn({ profile }) {
+      if (!(profile?.email && profile?.name)) return true;
+      const resp = await loops.createContact(profile.email);
+      if (!resp.success) {
+        console.log("LOOPS_ERROR_SIGN_IN_CREATE_CONTACT", resp.message);
+      }
       // const customer = await stripe.customers.create({
       //   email: profile?.email,
       //   name: profile?.name,
