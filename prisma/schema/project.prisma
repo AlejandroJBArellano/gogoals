@@ -7,4 +7,6 @@ model Project {
     userId      String   @map("user_id")
     user        User     @relation(fields: [userId], references: [id])
     tasks       Task[]
+
+    @@map("projects")
 }
