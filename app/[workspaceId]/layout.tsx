@@ -3,7 +3,14 @@ import { prisma } from "@/prisma";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 
-export default async function DashboardLayout({ children }: PropsWithChildren) {
+export default async function DashboardLayout({
+  children,
+  params,
+}: PropsWithChildren<{
+  params: {
+    workspaceId: string;
+  };
+}>) {
   const session = await auth();
 
   const workspaces = await prisma.workspace.findMany({
@@ -39,11 +46,14 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
         <nav className="p-4">
           <ul>
             {[
-              { path: "/dashboard/team", name: "My team" },
-              { path: "/dashboard/projects", name: "My projects" },
-              { path: "/dashboard/configuration", name: "Configuration" },
-              { path: "/dashboard/account", name: "Account" },
-              { path: "/dashboard/billing", name: "Billing" },
+              { path: `/${params.workspaceId}/team`, name: "My team" },
+              { path: `/${params.workspaceId}/projects`, name: "My projects" },
+              {
+                path: `/${params.workspaceId}/configuration`,
+                name: "Configuration",
+              },
+              { path: `/${params.workspaceId}/account`, name: "Account" },
+              { path: `/${params.workspaceId}/billing`, name: "Billing" },
             ].map((item) => (
               <li key={item.path} className="mb-2">
                 <Link
