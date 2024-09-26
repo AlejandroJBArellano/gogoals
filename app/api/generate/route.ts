@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const result = generateSchema.safeParse(body);
 
   if (!result.success) {
-    return NextResponse.json(result.error);
+    return NextResponse.json(result.error, { status: 403 });
   }
 
   const data = result.data!;
