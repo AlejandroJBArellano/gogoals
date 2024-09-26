@@ -1,12 +1,14 @@
 model Project {
-    id          String   @id @default(cuid())
+    id          String    @id @default(cuid())
     name        String
     description String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    userId      String   @map("user_id")
-    user        User     @relation(fields: [userId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    userId      String    @map("user_id")
+    user        User      @relation(fields: [userId], references: [id])
     tasks       Task[]
+    workspaceId String    @unique
+    workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
     @@map("projects")
 }
