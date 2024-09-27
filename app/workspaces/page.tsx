@@ -43,7 +43,7 @@ export default async function WorkspacesSelector() {
               className="bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
             >
               <Link
-                href={`/${workspace.id}`}
+                href={`/${workspace.id}/projects`}
                 className="block w-full p-4 text-left text-gray-800 hover:text-blue-600"
               >
                 <div className="flex items-center justify-between">
