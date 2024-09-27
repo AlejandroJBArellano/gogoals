@@ -15,34 +15,76 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">{project.name}</h1>
-      <p className="text-gray-600 mb-8">{project.description}</p>
+      <header className="mb-8 bg-white shadow-sm rounded-lg p-6">
+        <h1 className="text-4xl font-bold mb-3 text-gray-800">
+          {project.name}
+        </h1>
+        <p className="text-gray-600 text-lg">{project.description}</p>
+        <div className="mt-4 flex items-center text-sm text-gray-500">
+          <span className="mr-4">
+            Created: {new Date(project.createdAt).toLocaleDateString()}
+          </span>
+          <span>
+            Last updated: {new Date(project.updatedAt).toLocaleDateString()}
+          </span>
+        </div>
+      </header>
 
-      <div>
+      <section>
         <h2 className="text-2xl font-semibold mb-4">Tasks</h2>
         {project.tasks && project.tasks.length > 0 ? (
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-4 text-left">Task Name</th>
-                <th className="p-4 text-left">Description</th>
-                <th className="p-4 text-left">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {project.tasks.map((task) => (
-                <tr key={task.id} className="border-b">
-                  <td className="p-4 font-bold">{task.name}</td>
-                  <td className="p-4 text-gray-600">{task.description}</td>
-                  <td className="p-4">{task.status}</td>
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Task Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {project.tasks.map((task) => (
+                  <tr key={task.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="font-medium text-gray-900">
+                        {task.name}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-500">
+                        {task.description}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          task.status === "COMPLETED"
+                            ? "bg-green-100 text-green-800"
+                            : task.status === "IN_PROGRESS"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {task.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
-          <p>No tasks found for this project.</p>
+          <p className="text-gray-500 italic">
+            No tasks found for this project.
+          </p>
         )}
-      </div>
+      </section>
     </div>
   );
 }
