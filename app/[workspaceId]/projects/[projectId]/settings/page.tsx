@@ -19,7 +19,7 @@ export default function ProjectSettings({
     ) {
       setIsDeleting(true);
       try {
-        const response = await fetch(`/api/projects/${params.projectId}`, {
+        const response = await fetch(`/api/project/${params.projectId}`, {
           method: "DELETE",
         });
 
