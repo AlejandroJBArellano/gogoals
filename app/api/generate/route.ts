@@ -1,9 +1,9 @@
 import generateSchema from "@/app/schemas/generate";
+import { promptSchema, promptSchemaWithAssignees } from "@/app/schemas/prompt";
 import { prisma } from "@/prisma";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -33,29 +33,13 @@ export async function POST(req: Request) {
 
   prompt += ` The project starts on ${startDate} and is due on ${dueDate}.`;
 
-  prompt += ` Please create a detailed task breakdown for this project, considering the timeframe and available assignees.`;
+  prompt += ` Please create a detailed task breakdown for this project, considering the timeframe.`;
 
   const { object } = await generateObject({
     model: google("gemini-1.5-pro-latest"),
-    schema: z.object({
-      project: z.object({
-        name: z.string(),
-        tasks: z.array(
-          z.object({
-            name: z.string(),
-            description: z.string(),
-            startDate: z.string(),
-            endDate: z.string(),
-            priority: z.string(),
-            assignees: z.array(z.string()),
-          })
-        ),
-      }),
-    }),
+    schema: data.assignees?.length ? promptSchemaWithAssignees : promptSchema,
     prompt,
   });
-
-  console.log({ object });
 
   return NextResponse.json(
     { message: "Content generated!", object },
