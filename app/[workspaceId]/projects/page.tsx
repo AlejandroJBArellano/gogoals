@@ -4,7 +4,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { NewProject } from "../../components/newProject";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  params,
+}: {
+  params: { workspaceId: string };
+}) {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -14,7 +18,7 @@ export default async function DashboardPage() {
 
   const projects = await prisma.project.findMany({
     where: {
-      userId: session.user.id,
+      workspaceId: params.workspaceId,
     },
   });
 
@@ -27,7 +31,7 @@ export default async function DashboardPage() {
             <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
             <p className="text-gray-600 mb-4">{project.description}</p>
             <Link
-              href={`/dashboard/project/${project.id}`}
+              href={`/${params.workspaceId}/projects/${project.id}`}
               className="text-blue-600 hover:underline"
             >
               Ver detalles

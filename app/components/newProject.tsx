@@ -1,9 +1,12 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export const NewProject = () => {
   const [projectName, setProjectName] = useState("");
+
+  const { workspaceId } = useParams();
 
   const close = () => {
     const dialog = document.getElementById("dialog") as HTMLDialogElement;
@@ -29,6 +32,30 @@ export const NewProject = () => {
         }),
       });
       if (response.ok) {
+        const result = await response.json();
+        const { object } = result;
+
+        // Create the project using the generated data
+        const createProjectResponse = await fetch("/api/project", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            workspaceId, // You need to provide the actual workspaceId
+            name: projectName,
+            description: object.project.description,
+            generatedTasks: object.project.tasks,
+          }),
+        });
+
+        if (createProjectResponse.ok) {
+          const { project } = await createProjectResponse.json();
+          // Redirect to the new project page
+          window.location.href = `/${project.workspaceId}/projects/${project.id}`;
+        } else {
+          console.error("Failed to create project");
+        }
         close();
       } else {
         // Handle error

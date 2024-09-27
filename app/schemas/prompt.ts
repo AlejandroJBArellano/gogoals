@@ -3,6 +3,7 @@ import { z } from "zod";
 export const promptSchemaWithAssignees = z.object({
   project: z.object({
     name: z.string(),
+    description: z.string(),
     tasks: z.array(
       z.object({
         name: z.string(),
@@ -19,6 +20,7 @@ export const promptSchemaWithAssignees = z.object({
 export const promptSchema = z.object({
   project: z.object({
     name: z.string(),
+    description: z.string(),
     tasks: z.array(
       z.object({
         name: z.string(),

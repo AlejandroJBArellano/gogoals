@@ -11,6 +11,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
+    console.log({ body });
     const { workspaceId, name, description, generatedTasks } = body;
 
     // Create the project
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
           name: task.name,
           description: task.description,
           startDate: new Date(task.startDate),
-          endDate: new Date(task.endDate),
+          dueDate: new Date(task.endDate),
           priority: task.priority,
           projectId: project.id,
           // Note: Assignees are not handled here as they might require additional logic
