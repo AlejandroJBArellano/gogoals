@@ -8,8 +8,8 @@ model Workspace {
     owner       User     @relation(fields: [ownerId], references: [id])
 
     // Relationships
-    projects     Project[]
-    colaborators Collaborator[]
+    projects      Project[]
+    collaborators Collaborator[]
 
     @@map("workspaces")
 }

@@ -1,11 +1,27 @@
 import { auth } from "@/auth";
 import { InviteUser } from "@/components/invite-user";
 import { prisma } from "@/prisma";
+import { notFound } from "next/navigation";
 
-export default async function TeamFromUser() {
+export default async function TeamFromUser({
+  params,
+}: {
+  params: { workspaceId: string };
+}) {
   const session = await auth();
 
-  const collaborators = await prisma.user.findMany();
+  const workspace = await prisma.workspace.findUnique({
+    where: { id: params.workspaceId },
+    include: {
+      collaborators: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+  if (!workspace) return notFound();
 
   return (
     <section className="flex-1 p-8">
@@ -22,21 +38,17 @@ export default async function TeamFromUser() {
             <tr className="bg-gray-100">
               <th className="p-4 text-left">Name</th>
               <th className="p-4 text-left">Email</th>
-              <th className="p-4 text-right">Actions</th>
+              <th className="p-4 text-left">Role</th>
             </tr>
           </thead>
           <tbody>
             {/* We'll map through users here */}
             {/* This is a placeholder, replace with actual data */}
-            {collaborators.map((collaborator) => (
+            {workspace.collaborators.map((collaborator) => (
               <tr key={collaborator.id} className="border-b">
-                <td className="p-4 font-medium">{collaborator.name}</td>
-                <td className="p-4 text-gray-600">{collaborator.email}</td>
-                <td className="p-4 text-right">
-                  <button className="text-red-500 hover:text-red-700">
-                    Remove
-                  </button>
-                </td>
+                <td className="p-4 font-medium">{collaborator.user.name}</td>
+                <td className="p-4 text-gray-600">{collaborator.user.email}</td>
+                <td className="p-4 text-gray-600">{collaborator.role}</td>
               </tr>
             ))}
           </tbody>

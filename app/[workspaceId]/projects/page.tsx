@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { NewProject } from "../components/newProject";
+import { NewProject } from "../../components/newProject";
 
 export default async function DashboardPage() {
   const session = await auth();
