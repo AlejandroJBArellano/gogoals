@@ -46,6 +46,12 @@ export default async function ProjectDetailPage({
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Start Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Due Date
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -73,6 +79,20 @@ export default async function ProjectDetailPage({
                       >
                         {task.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {task.startDate
+                          ? new Date(task.startDate).toLocaleDateString()
+                          : "Not set"}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {task.dueDate
+                          ? new Date(task.dueDate).toLocaleDateString()
+                          : "Not set"}
+                      </div>
                     </td>
                   </tr>
                 ))}
