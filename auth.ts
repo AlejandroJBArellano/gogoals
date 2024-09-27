@@ -13,10 +13,17 @@ export const {
   signOut,
 } = NextAuth({
   adapter: PrismaAdapter(prisma) as Adapter,
-  providers: [Google],
+  providers: [
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
   session: { strategy: "jwt" },
   callbacks: {
-    async signIn({ profile }) {
+    async signIn({ account, profile }) {
+      if (account?.provider === "google") {
+        return !!profile?.email_verified;
+      }
       if (!(profile?.email && profile?.name)) return true;
       const resp = await loops.createContact(profile.email);
       if (!resp.success) {

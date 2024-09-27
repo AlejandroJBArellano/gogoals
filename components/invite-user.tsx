@@ -1,9 +1,13 @@
 "use client";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export const InviteUser = () => {
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+
+  const { workspaceId } = useParams();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -14,7 +18,7 @@ export const InviteUser = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, role, workspaceId }),
       });
 
       if (response.ok) {
@@ -32,20 +36,30 @@ export const InviteUser = () => {
 
   return (
     <form onSubmit={handleSubmit} className="mb-8">
-      <div className="flex items-center">
+      <div className="flex flex-col space-y-4">
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter user email"
-          className="flex-grow mr-2 p-2 border rounded"
+          className="p-2 border rounded"
           required
         />
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="p-2 border rounded"
+          required
+        >
+          <option value="">Select role</option>
+          <option value="MEMBER">Member</option>
+          <option value="ADMIN">Admin</option>
+        </select>
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Add User
+          Invite User
         </button>
       </div>
     </form>
